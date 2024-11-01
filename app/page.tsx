@@ -1,11 +1,12 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Sliders, Building, Star, Wifi, Home, Users, ArrowRight, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 const RoomSearch = () => {
   const [searchValue, setSearchValue] = useState('');
   const [showSuggestions, setShowSuggestions] = useState(false);
+  const [filteredSuggestions, setFilteredSuggestions] = useState<string[]>([]);
 
   const suggestions = [
     "Kos Putri Menteng Jakarta",
@@ -54,6 +55,42 @@ const RoomSearch = () => {
     }
   ];
 
+  // Debounce function
+  const debounce = (func: Function, delay: number) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: any[]) => {
+      if (timeoutId) {
+        clearTimeout(timeoutId);
+      }
+      timeoutId = setTimeout(() => {
+        func(...args);
+      }, delay);
+    };
+  };
+
+  // Effect to filter suggestions based on search value
+  useEffect(() => {
+    const filterSuggestions = () => {
+      if (searchValue) {
+        const filtered = suggestions.filter(suggestion =>
+          suggestion.toLowerCase().includes(searchValue.toLowerCase())
+        );
+        setFilteredSuggestions(filtered);
+      } else {
+        setFilteredSuggestions(suggestions);
+      }
+    };
+
+    const debouncedFilter = debounce(filterSuggestions, 200);
+    debouncedFilter();
+  }, [searchValue]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      setFilteredSuggestions(suggestions);
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-500">
       {/* Navigation */}
@@ -85,7 +122,7 @@ const RoomSearch = () => {
                   className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
                   value={searchValue}
                   onChange={(e) => setSearchValue(e.target.value)}
-                  // onFocus={() => setShowSuggestions(true)}
+                  onFocus={() => setShowSuggestions(true)}
                 />
                 {searchValue && (
                   <button 
@@ -103,9 +140,9 @@ const RoomSearch = () => {
             </div>
 
             {/* Search Suggestions */}
-            {showSuggestions && (
-              <div className="absolute top-full left-0 right-0 bg-white rounded-b-lg shadow-lg border-t z-10">
-                {suggestions.map((suggestion, index) => (
+            {showSuggestions && filteredSuggestions.length > 0 && (
+              <div className="absolute top-1/2 left-0 right-0 bg-white rounded-b-lg shadow-lg border-t z-10 mt-1">
+                {filteredSuggestions.map((suggestion, index) => (
                   <button 
                     key={index}
                     className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2"
