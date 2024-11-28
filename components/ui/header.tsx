@@ -23,6 +23,7 @@ function Header() {
     const pathname = usePathname()
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState('')
+    const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
 
     useEffect(() => {
         const accessToken = localStorage.getItem('access_token')
@@ -37,6 +38,11 @@ function Header() {
         setIsLoggedIn(false)
         setUsername('')
         router.push('/')
+    }
+
+    const handleNavigation = (path: string) => {
+        router.push(path)
+        setIsMobileNavOpen(false)
     }
 
     const isActive = (path: string) => {
@@ -111,7 +117,7 @@ function Header() {
 
             {/* Mobile Menu */}
             <div className="md:hidden">
-                <Sheet>
+                <Sheet open={isMobileNavOpen} onOpenChange={setIsMobileNavOpen}>
                     <SheetTrigger asChild>
                         <Button variant="ghost" className="px-0 text-white">
                             <Menu className="h-6 w-6" />
@@ -120,15 +126,14 @@ function Header() {
                     <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                         <nav className="flex flex-col gap-4">
                             {menuItems.map((item) => (
-                                <Link href={item.path} key={item.name}>
-                                    <Button
-                                        variant="ghost"
-                                        className={`w-full justify-start ${isActive(item.path) ? 'bg-[#6357FF] text-white' : ''}`}
-                                    >
-                                        <item.icon className="mr-2 h-4 w-4" />
-                                        {item.name}
-                                    </Button>
-                                </Link>
+                                <Button
+                                    variant="ghost"
+                                    className={`w-full justify-start ${isActive(item.path) ? 'bg-[#6357FF] text-white' : ''}`}
+                                    onClick={() => handleNavigation(item.path)}
+                                >
+                                    <item.icon className="mr-2 h-4 w-4" />
+                                    {item.name}
+                                </Button>
                             ))}
                             {isLoggedIn ? (
                                 <>

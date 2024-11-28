@@ -150,15 +150,11 @@ const RoomSearch = () => {
             {/* Quick Filters */}
             <div className="flex gap-4 mt-4">
               <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                <Sliders size={16} />
+                <Sliders size={12} />
                 Filter
               </button>
               <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                <Building size={16} />
-                Tipe Kos
-              </button>
-              <button className="flex items-center gap-2 px-4 py-2 bg-gray-100 rounded-full hover:bg-gray-200">
-                <Users size={16} />
+                <Users size={12} />
                 Kapasitas
               </button>
             </div>
@@ -170,7 +166,7 @@ const RoomSearch = () => {
           <span className="text-indigo-100">Populer:</span>
           <button className="text-white hover:underline">Kos Putri</button>
           <button className="text-white hover:underline">Kos Dekat Kampus</button>
-          <button className="text-white hover:underline">Kos Bulanan</button>
+          <button className="text-white hover:underline md:flex hidden">Kos Bulanan</button>
         </div>
       </div>
 
