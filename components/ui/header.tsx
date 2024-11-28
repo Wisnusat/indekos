@@ -38,6 +38,7 @@ function Header() {
         setIsLoggedIn(false)
         setUsername('')
         router.push('/')
+        setIsMobileNavOpen(false)
     }
 
     const handleNavigation = (path: string) => {
@@ -157,16 +158,13 @@ function Header() {
                                 </>
                             ) : (
                                 <>
-                                    <Link href="/login">
-                                        <Button className="w-full bg-[#F5F7FF] text-[#5046E5] hover:text-white">
-                                            Log In
-                                        </Button>
-                                    </Link>
-                                    <Link href="/signup">
-                                        <Button className="w-full bg-[#5046E5] text-white border border-white">
-                                            Sign Up
-                                        </Button>
-                                    </Link>
+
+                                    <Button className="w-full bg-[#F5F7FF] text-[#5046E5] hover:text-white" onClick={() => handleNavigation("/login")}>
+                                        Log In
+                                    </Button>
+                                    <Button className="w-full bg-[#5046E5] text-white border border-white" onClick={() => handleNavigation("/signup")}>
+                                        Sign Up
+                                    </Button>
                                 </>
                             )}
                         </nav>
