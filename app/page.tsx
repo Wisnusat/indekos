@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Sliders, Building, Star, Wifi, Home, Users, ArrowRight, X } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 const RoomSearch = () => {
   const [searchValue, setSearchValue] = useState('');
@@ -93,18 +94,6 @@ const RoomSearch = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-indigo-600 to-purple-500">
-      {/* Navigation */}
-      <nav className="flex items-center justify-between px-6 py-4">
-        <div className="text-white text-2xl font-bold">Indekos</div>
-        <div className="flex gap-4">
-          <a href="#" className="text-white hover:text-indigo-100">Pusat Bantuan</a>
-          <a href="#" className="text-white hover:text-indigo-100">Syarat dan Ketentuan</a>
-          <button className="bg-white text-indigo-600 px-4 py-1 rounded-full hover:bg-indigo-50">
-            Log In
-          </button>
-        </div>
-      </nav>
-
       {/* Hero Section */}
       <div className="flex flex-col items-center justify-center px-4 pt-16 pb-24">
         <h1 className="text-white text-5xl font-bold mb-3">Temukan Kos Impianmu</h1>
@@ -125,7 +114,7 @@ const RoomSearch = () => {
                   onFocus={() => setShowSuggestions(true)}
                 />
                 {searchValue && (
-                  <button 
+                  <button
                     className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
                     onClick={() => setSearchValue('')}
                   >
@@ -143,7 +132,7 @@ const RoomSearch = () => {
             {showSuggestions && filteredSuggestions.length > 0 && (
               <div className="absolute top-1/2 left-0 right-0 bg-white rounded-b-lg shadow-lg border-t z-10 mt-1">
                 {filteredSuggestions.map((suggestion, index) => (
-                  <button 
+                  <button
                     key={index}
                     className="w-full text-left px-4 py-2 hover:bg-gray-50 flex items-center gap-2"
                     onClick={() => {
@@ -236,10 +225,10 @@ const RoomSearch = () => {
                     ))}
                   </div>
                   <div className="flex justify-between items-center">
-                    <div className="text-xl font-bold text-indigo-600">{room.price}</div>
-                    <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700">
+                    <div className="text-xl font-bold text-black">{room.price}</div>
+                    <Button variant="default" className="bg-indigo-600">
                       Lihat Detail
-                    </button>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
