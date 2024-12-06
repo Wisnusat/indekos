@@ -32,7 +32,7 @@ const RoomSearch = () => {
       reviews: 124,
       amenities: ["WiFi", "AC", "Furnished"],
       type: "Putri",
-      image: "https://via.placeholder.com/600x400.png?text=Room+Image"
+      image: "https://plus.unsplash.com/premium_photo-1724061887788-6c90ca9b83d1?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     },
     {
       title: "Kos Exclusive BSD",
@@ -42,7 +42,7 @@ const RoomSearch = () => {
       reviews: 98,
       amenities: ["WiFi", "AC", "Dapur"],
       type: "Campur",
-      image: "https://via.placeholder.com/600x400.png?text=Room+Image"
+      image: "https://plus.unsplash.com/premium_photo-1724061884144-6ec1a0f90f2b?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     },
     {
       title: "Kos Near Campus",
@@ -52,7 +52,7 @@ const RoomSearch = () => {
       reviews: 156,
       amenities: ["WiFi", "Furnished"],
       type: "Putra",
-      image: "https://via.placeholder.com/600x400.png?text=Room+Image"
+      image: "https://images.unsplash.com/photo-1626290246891-a498b0097e3d?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
     }
   ];
 
