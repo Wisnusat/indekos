@@ -8,11 +8,12 @@ import { Star, MapPin, Bookmark } from 'lucide-react'
 import { toast } from 'sonner'
 import { IRoom } from '../room-list/page'
 
+// Mock data for rooms (unchanged)
 const rooms = [
     {
         id: 1,
         name: "Cozy Studio in Downtown",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://a0.muscache.com/im/pictures/cca483a5-54b2-4c8d-97fb-722f93830f09.jpg?im_w=720&im_format=avif",
         price: 500000,
         rating: 4.5,
         location: "Jakarta Pusat",
@@ -21,7 +22,7 @@ const rooms = [
     {
         id: 2,
         name: "Spacious 2BR Apartment",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://plus.unsplash.com/premium_photo-1684508638760-72ad80c0055f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         price: 800000,
         rating: 4.8,
         location: "Bandung",
@@ -30,7 +31,7 @@ const rooms = [
     {
         id: 3,
         name: "Modern Loft near University",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://plus.unsplash.com/premium_photo-1684508638760-72ad80c0055f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         price: 600000,
         rating: 4.2,
         location: "Yogyakarta",
@@ -39,7 +40,7 @@ const rooms = [
     {
         id: 4,
         name: "Beachfront Bungalow",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://plus.unsplash.com/premium_photo-1684508638760-72ad80c0055f?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         price: 1000000,
         rating: 4.9,
         location: "Bali",
@@ -48,7 +49,7 @@ const rooms = [
     {
         id: 5,
         name: "City View Studio",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         price: 550000,
         rating: 4.3,
         location: "Surabaya",
@@ -57,7 +58,7 @@ const rooms = [
     {
         id: 6,
         name: "Cozy 1BR near Mall",
-        image: "/placeholder.svg?height=200&width=300",
+        image: "https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
         price: 700000,
         rating: 4.6,
         location: "Jakarta Selatan",
