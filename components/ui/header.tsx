@@ -24,20 +24,25 @@ function Header() {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const [username, setUsername] = useState('')
     const [isMobileNavOpen, setIsMobileNavOpen] = useState(false)
+    const [role, setRole] = useState('seeker')
 
     useEffect(() => {
-        const accessToken = localStorage.getItem('access_token')
-        if (accessToken) {
-            setIsLoggedIn(true)
-            setUsername('John Doe')
+        if (typeof window !== 'undefined') {
+            const isLogged = localStorage.getItem('isLogged')
+            if (isLogged) {
+                setIsLoggedIn(true)
+                setUsername(isLogged.split("-")[2] || "John Doe")
+                setRole(isLogged.split("-")[1])
+            }
         }
-    }, [])
+    }, [pathname])
 
     const handleLogout = () => {
-        localStorage.removeItem('access_token')
+        localStorage.removeItem('isLogged')
         setIsLoggedIn(false)
         setUsername('')
         router.push('/')
+        setRole('seeker')
         setIsMobileNavOpen(false)
     }
 
@@ -59,13 +64,28 @@ function Header() {
         { name: 'Bookmarks', path: '/bookmarks', icon: Bookmark },
     ]
 
+    const menuItemsOwner = [
+        { name: 'Requests List', path: '/owner/requests', icon: LayoutDashboard },
+        { name: 'Add Room', path: '/owner/rooms/add', icon: Home },
+    ]
+
     return (
         <nav className="flex items-center justify-between px-6 py-4 bg-[#5046E5]">
             <div className="text-white text-2xl font-bold cursor-pointer" onClick={() => router.push("/")}>Indekos</div>
 
             {/* Desktop Menu */}
             <div className="hidden md:flex items-center gap-4">
-                {menuItems.map((item) => (
+                {role === 'seeker' ? menuItems.map((item) => (
+                    <Link href={item.path} key={item.name}>
+                        <Button
+                            variant="ghost"
+                            className={`text-white hover:text-white hover:bg-[#6357FF] ${isActive(item.path) ? 'bg-[#6357FF]' : ''}`}
+                        >
+                            <item.icon className="mr-2 h-4 w-4" />
+                            {item.name}
+                        </Button>
+                    </Link>
+                )) : menuItemsOwner.map((item) => (
                     <Link href={item.path} key={item.name}>
                         <Button
                             variant="ghost"

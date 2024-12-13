@@ -16,10 +16,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Eye, EyeOff } from 'lucide-react'
+import { Eye, EyeOff, Loader2 } from 'lucide-react'
+import axiosInstance from '@/lib/axios'
+import { toast } from 'sonner'
+import { useRouter } from 'next/navigation'
 
 const formSchema = z.object({
-  user_type: z.enum(['penyewa', 'pemilik'], {
+  user_type: z.enum(['penyewa', 'pemilik_kos'], {
     required_error: "Please select a user type",
   }),
   nama: z.string().min(2, {
@@ -40,7 +43,9 @@ const formSchema = z.object({
 })
 
 export default function SignupPage() {
+  const router = useRouter()
   const [showPassword, setShowPassword] = useState(false)
+  const [isSubmitting, setIsSubmit] = useState(false)
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -53,9 +58,20 @@ export default function SignupPage() {
     },
   })
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values)
-    // Here you would typically send the data to your backend
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    setIsSubmit(true)
+    const response = await axiosInstance.post('/register', values);
+    if (response.status === 200) {
+      toast.success(response?.data?.message, {
+        duration: 1000,
+        onAutoClose: () => router.push('/login')
+      })
+    } else {
+      toast.error(response?.data?.message || "Error ocurred, please try again", {
+        duration: 1000,
+      })
+    }
+    setIsSubmit(false)
   }
 
   return (
@@ -89,7 +105,7 @@ export default function SignupPage() {
                             </FormItem>
                             <FormItem className="flex items-center space-x-3 space-y-0">
                               <FormControl>
-                                <RadioGroupItem value="pemilik" />
+                                <RadioGroupItem value="pemilik_kos" />
                               </FormControl>
                               <FormLabel className="font-normal">
                                 Pemilik (Owner)
@@ -101,7 +117,7 @@ export default function SignupPage() {
                       </FormItem>
                     )}
                   />
-                  
+
                   <FormField
                     control={form.control}
                     name="nama"
@@ -197,8 +213,7 @@ export default function SignupPage() {
                   />
                 </div>
               </div>
-
-              <Button type="submit" className="w-full bg-[#5046E5]">Sign Up</Button>
+              <Button type="submit" disabled={isSubmitting} className="w-full bg-[#5046E5]">{isSubmitting ? <Loader2 className="animate-spin text-primary" /> : "Sign Up"}</Button>
             </form>
           </Form>
         </div>

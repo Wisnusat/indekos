@@ -71,11 +71,13 @@ export default function BookmarksPage() {
     const router = useRouter()
 
     useEffect(() => {
-        const storedBookmarks = localStorage.getItem('bookmarkedRooms')
-        if (storedBookmarks) {
-            setBookmarkedRooms(JSON.parse(storedBookmarks))
+        if (typeof window !== 'undefined') {
+            const storedBookmarks = localStorage.getItem('bookmarkedRooms');
+            if (storedBookmarks) {
+                setBookmarkedRooms(JSON.parse(storedBookmarks));
+            }
         }
-    }, [])
+    }, []);
 
     const handleViewDetails = (room: IRoom) => {
         localStorage.setItem('selectedRoom', JSON.stringify(room))
