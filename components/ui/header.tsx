@@ -126,8 +126,9 @@ function Header() {
                     </SheetTrigger>
                     <SheetContent side="right" className="w-[300px] sm:w-[400px]">
                         <nav className="flex flex-col gap-4">
-                            {menuItems.map((item) => (
+                            {menuItems.map((item, index) => (
                                 <Button
+                                    key={index}
                                     variant="ghost"
                                     className={`w-full justify-start ${isActive(item.path) ? 'bg-[#6357FF] text-white' : ''}`}
                                     onClick={() => handleNavigation(item.path)}
