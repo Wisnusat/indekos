@@ -116,7 +116,7 @@ const requests = [
   {
     id: 1,
     roomName: "Cozy Studio in Downtown",
-    roomImage: "/placeholder.svg?height=64&width=64",
+    roomImage: "https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     location: "Jakarta Pusat",
     tenantName: "John Doe",
     startDate: "2024-01-15",
@@ -127,7 +127,7 @@ const requests = [
   {
     id: 2,
     roomName: "Spacious 2BR Apartment",
-    roomImage: "/placeholder.svg?height=64&width=64",
+    roomImage: "https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     location: "Bandung",
     tenantName: "Jane Smith",
     startDate: "2024-02-01",

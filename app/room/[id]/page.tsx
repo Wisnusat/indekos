@@ -15,6 +15,7 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import Loading from '@/components/ui/loading'
+import Link from 'next/link'
 
 export default function RoomDetailPage() {
     const [room, setRoom] = useState<IRoom | null>(null)
@@ -22,7 +23,7 @@ export default function RoomDetailPage() {
 
     const handleBookNow = () => {
         localStorage.setItem('selectedRoom', JSON.stringify(room))
-        router.push(`/reservation/${room?.id || 0}`)
+        router.push(`/reservation/${room?.id_kos || 0}`)
     }
 
     useEffect(() => {
@@ -47,25 +48,25 @@ export default function RoomDetailPage() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink href="#">{room.name}</BreadcrumbLink>
+                        <BreadcrumbLink href="#">{room.nama_kos}</BreadcrumbLink>
                     </BreadcrumbItem>
                 </BreadcrumbList>
             </Breadcrumb>
-            <h1 className="text-3xl font-bold mb-6 mt-4">{room.name}</h1>
+            <h1 className="text-3xl font-bold mb-6 mt-4">{room.nama_kos}</h1>
 
             <div className="w-full">
                 <div className="flex gap-4 md:mb-2 mb-6 md:flex-row flex-col">
-                    <img src={room.image} alt={room.name} className="w-full h-[400px] object-cover rounded-lg mb-6" />
+                    <img src="https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt={room.nama_kos} className="w-full h-[400px] object-cover rounded-lg mb-6" />
                     <div className="md:w-[40%] w-full">
                         <Card>
                             <CardContent className="p-6">
                                 <div className="flex justify-between items-center mb-4">
                                     <div className="text-2xl font-bold">
-                                        Rp {room.price.toLocaleString('id-ID')} <span className="text-sm font-normal text-gray-500">/ month</span>
+                                        Rp {room.harga_sewa.toLocaleString('id-ID')} <span className="text-sm font-normal text-gray-500">/ month</span>
                                     </div>
                                     <div className="flex items-center">
                                         <Star className="w-5 h-5 text-yellow-400 mr-1" />
-                                        <span className="font-semibold">{room.rating}</span>
+                                        <span className="font-semibold">{(Math.random() * 5.0).toFixed(1)}</span>
                                     </div>
                                 </div>
 
@@ -74,11 +75,11 @@ export default function RoomDetailPage() {
                                 <div className="space-y-4 mb-6">
                                     <div className="flex items-center">
                                         <MapPin className="w-5 h-5 mr-2" />
-                                        <span>{room.location}</span>
+                                        <span>{room.alamat_kos}</span>
                                     </div>
                                     <div className="flex items-center">
                                         <Home className="w-5 h-5 mr-2" />
-                                        <span>{room.type}</span>
+                                        <span>{room.status_kos}</span>
                                     </div>
                                     <div className="flex items-center">
                                         <Users className="w-5 h-5 mr-2" />
@@ -91,7 +92,7 @@ export default function RoomDetailPage() {
                                 </div>
 
                                 <Button variant="default" className='bg-indigo-600 w-full mb-4' onClick={handleBookNow}>Book Now</Button>
-                                <Button variant="outline" className="w-full">Contact Host</Button>
+                                <Link href={`https://wa.me/${6282229468492}`} target='_blank'><Button variant="outline" className="w-full">Contact Host</Button></Link>
                             </CardContent>
                         </Card>
                     </div>
@@ -100,7 +101,7 @@ export default function RoomDetailPage() {
                     <CardContent className="p-6">
                         <h2 className="text-2xl font-semibold mb-4">About this space</h2>
                         <p className="text-gray-600 mb-4">
-                            This {room.type} is located in the heart of {room.location}. It offers a comfortable living space with modern amenities and easy access to local attractions.
+                            {room.deskripsi}
                         </p>
 
                         <Separator className="my-6" />

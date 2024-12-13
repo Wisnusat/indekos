@@ -7,6 +7,8 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { Star, MapPin, Bookmark } from 'lucide-react'
 import { toast } from 'sonner'
 import { IRoom } from '../room-list/page'
+import axiosInstance from '@/lib/axios'
+import Loading from '@/components/ui/loading'
 
 // Mock data for rooms (unchanged)
 const rooms = [
@@ -68,7 +70,20 @@ const rooms = [
 
 export default function BookmarksPage() {
     const [bookmarkedRooms, setBookmarkedRooms] = useState<number[]>([])
+    const [roomsData, setRoomData] = useState<IRoom[]>([])
+    const [isFetching, setIsFetching] = useState<boolean>(false)
     const router = useRouter()
+
+    const fetchRoomData = async () => {
+        setIsFetching(true)
+        const response = await axiosInstance.get("/kos")
+        if (response.status === 200) {
+            setRoomData(response.data)
+        } else {
+            toast.error("Error fetching room data")
+        }
+        setIsFetching(false)
+    }
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -79,9 +94,13 @@ export default function BookmarksPage() {
         }
     }, []);
 
+    useEffect(() => {
+        fetchRoomData()
+    }, [])
+
     const handleViewDetails = (room: IRoom) => {
         localStorage.setItem('selectedRoom', JSON.stringify(room))
-        router.push(`/room/${room.id}`)
+        router.push(`/room/${room.id_kos}`)
     }
 
     const toggleBookmark = (roomId: number) => {
@@ -91,7 +110,9 @@ export default function BookmarksPage() {
         toast.success('Room removed from bookmarks')
     }
 
-    const bookmarkedRoomData = rooms.filter(room => bookmarkedRooms.includes(room.id))
+    const bookmarkedRoomData = roomsData.filter(room => bookmarkedRooms.includes(room.id_kos))
+
+    if (isFetching) return <Loading />
 
     return (
         <div className="container mx-auto px-4 py-8">
@@ -105,35 +126,35 @@ export default function BookmarksPage() {
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {bookmarkedRoomData.map(room => (
-                        <Card key={room.id} className="overflow-hidden">
+                        <Card key={room.id_kos} className="overflow-hidden">
                             <div className="relative">
-                                <img src={room.image} alt={room.name} className="w-full h-48 object-cover" />
+                                <img src="https://images.unsplash.com/photo-1725399103001-200ce2bb5350?q=80&w=1370&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt={room.nama_kos} className="w-full h-48 object-cover" />
                                 <Button
                                     variant="ghost"
                                     size="icon"
                                     className="absolute top-2 right-2 bg-white/50 hover:bg-white/75"
-                                    onClick={() => toggleBookmark(room.id)}
+                                    onClick={() => toggleBookmark(room.id_kos)}
                                 >
-                                    <Bookmark className={`w-8 h-8 ${bookmarkedRooms.includes(room.id) ? 'fill-indigo-600 text-indigo-600' : 'text-gray-600'}`} />
+                                    <Bookmark className={`w-8 h-8 ${bookmarkedRooms.includes(room.id_kos) ? 'fill-indigo-600 text-indigo-600' : 'text-gray-600'}`} />
                                 </Button>
                             </div>
                             <CardContent className="p-4">
                                 <div className="flex justify-between items-start mb-2">
-                                    <h2 className="text-lg font-semibold">{room.name}</h2>
+                                    <h2 className="text-lg font-semibold">{room.nama_kos}</h2>
                                     <div className="flex items-center">
                                         <Star className="w-4 h-4 text-yellow-400 mr-1" />
-                                        <span>{room.rating}</span>
+                                        <span>{(Math.random() * 5.0).toFixed(1)}</span>
                                     </div>
                                 </div>
                                 <div className="flex items-center text-gray-500 mb-2">
                                     <MapPin className="w-4 h-4 mr-1" />
-                                    <span>{room.location}</span>
+                                    <span>{room.alamat_kos}</span>
                                 </div>
-                                <div className="text-sm text-gray-500">{room.type}</div>
+                                <div className="text-sm text-gray-500">{room.status_kos}</div>
                             </CardContent>
                             <CardFooter className="p-4 border-t flex justify-between items-center">
                                 <div className="text-lg font-bold">
-                                    Rp {room.price.toLocaleString('id-ID')} <span className="text-sm font-normal text-gray-500">/ month</span>
+                                    Rp {room.harga_sewa.toLocaleString('id-ID')} <span className="text-sm font-normal text-gray-500">/ month</span>
                                 </div>
                                 <Button variant="default" className='bg-indigo-600' onClick={() => handleViewDetails(room)}>View Details</Button>
                             </CardFooter>

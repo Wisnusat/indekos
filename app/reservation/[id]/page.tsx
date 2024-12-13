@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
-import { format } from 'date-fns'
+import { format, addMonths } from 'date-fns'
 import { CalendarIcon } from 'lucide-react'
 import { DateRange } from 'react-day-picker'
 import { toast } from 'sonner'
@@ -23,10 +23,13 @@ import {
     BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb"
 import Loading from '@/components/ui/loading'
+import { Switch } from "@/components/ui/switch"
+import { Label } from "@/components/ui/label"
 
 export default function ReservationPage() {
     const [room, setRoom] = useState<IRoom | null>(null)
     const [date, setDate] = useState<DateRange | undefined>()
+    const [isMonthly, setIsMonthly] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
@@ -40,8 +43,13 @@ export default function ReservationPage() {
 
     const calculateTotalPrice = () => {
         if (!date?.from || !date?.to || !room) return 0
-        const days = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24))
-        return room.price * days
+        if (isMonthly) {
+            const months = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24 * 30))
+            return room.harga_sewa * months
+        } else {
+            const days = Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24))
+            return Math.ceil((room.harga_sewa / 30) * days)
+        }
     }
 
     const onSubmit = async (e: React.FormEvent) => {
@@ -61,6 +69,21 @@ export default function ReservationPage() {
         })
     }
 
+    const handleDateSelect = (selectedDate: DateRange | undefined) => {
+        if (selectedDate?.from) {
+            const from = selectedDate.from
+            let to
+            if (isMonthly) {
+                to = addMonths(from, 1)
+            } else {
+                to = selectedDate.to
+            }
+            setDate({ from, to })
+        } else {
+            setDate(undefined)
+        }
+    }
+
     if (!room) {
         return <Loading />
     }
@@ -74,7 +97,7 @@ export default function ReservationPage() {
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
-                        <BreadcrumbLink href={`/room/${room.id}`}>{room.name}</BreadcrumbLink>
+                        <BreadcrumbLink href={`/room/${room.id_kos}`}>{room.nama_kos}</BreadcrumbLink>
                     </BreadcrumbItem>
                     <BreadcrumbSeparator />
                     <BreadcrumbItem>
@@ -87,8 +110,18 @@ export default function ReservationPage() {
                 <form onSubmit={onSubmit}>
                     <CardContent className="p-6 space-y-4">
                         <div>
-                            <h2 className="text-2xl font-semibold">{room.name}</h2>
-                            <p className="text-gray-600">{room.location}</p>
+                            <h2 className="text-2xl font-semibold">{room.nama_kos}</h2>
+                            <p className="text-gray-600">{room.alamat_kos}</p>
+                        </div>
+                        <div className="flex items-center space-x-2">
+                            <Switch
+                                id="rental-type"
+                                checked={isMonthly}
+                                onCheckedChange={setIsMonthly}
+                            />
+                            <Label htmlFor="rental-type">
+                                {isMonthly ? 'Monthly Rental' : 'Daily Rental'}
+                            </Label>
                         </div>
                         <div>
                             <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -121,7 +154,7 @@ export default function ReservationPage() {
                                         mode="range"
                                         defaultMonth={date?.from}
                                         selected={date}
-                                        onSelect={setDate}
+                                        onSelect={handleDateSelect}
                                         numberOfMonths={2}
                                     />
                                 </PopoverContent>
@@ -129,8 +162,18 @@ export default function ReservationPage() {
                         </div>
                         <div>
                             <h3 className="text-lg font-semibold">Price Details</h3>
-                            <p className="mb-2">Daily Rate: Rp {room.price.toLocaleString('id-ID')}</p>
-                            <p className="mb-2">Total Days: {date?.from && date?.to ? Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24)) : 0}</p>
+                            <p className="mb-2">
+                                {isMonthly ? 'Monthly' : 'Daily'} Rate: Rp {isMonthly 
+                                    ? room.harga_sewa.toLocaleString('id-ID') 
+                                    : Math.ceil(room.harga_sewa / 30).toLocaleString('id-ID')}
+                            </p>
+                            <p className="mb-2">
+                                Total {isMonthly ? 'Months' : 'Days'}: {date?.from && date?.to 
+                                    ? isMonthly 
+                                        ? Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24 * 30)) 
+                                        : Math.ceil((date.to.getTime() - date.from.getTime()) / (1000 * 3600 * 24)) 
+                                    : 0}
+                            </p>
                             <p className="text-xl font-bold mt-2">
                                 Total: Rp {calculateTotalPrice().toLocaleString('id-ID')}
                             </p>
