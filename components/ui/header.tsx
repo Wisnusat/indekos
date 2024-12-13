@@ -17,6 +17,7 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import { Menu, User, LogOut, LayoutDashboard, Home, Bookmark } from 'lucide-react'
+import { toast } from 'sonner'
 
 function Header() {
     const router = useRouter()
@@ -38,12 +39,17 @@ function Header() {
     }, [pathname])
 
     const handleLogout = () => {
-        localStorage.removeItem('isLogged')
-        setIsLoggedIn(false)
-        setUsername('')
-        router.push('/')
-        setRole('seeker')
-        setIsMobileNavOpen(false)
+        toast.success("Logout Success", {
+            duration: 1000,
+            onAutoClose: () => {
+                localStorage.removeItem('isLogged')
+                setIsLoggedIn(false)
+                setUsername('')
+                router.push('/')
+                setRole('seeker')
+                setIsMobileNavOpen(false)
+            }
+        })
     }
 
     const handleNavigation = (path: string) => {
@@ -145,6 +151,23 @@ function Header() {
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+                        {isLoggedIn && (
+                            <>
+                                <div className="flex items-center gap-4 mb-4">
+                                    <Avatar className="h-8 w-8">
+                                        <AvatarImage src="/placeholder.svg" alt={username} />
+                                        <AvatarFallback>{username.charAt(0)}</AvatarFallback>
+                                    </Avatar>
+                                    <span>{username}</span>
+                                </div>
+                                <Link href="/profile">
+                                    <Button variant="ghost" className="w-full justify-start mb-4">
+                                        <User className="mr-2 h-4 w-4" />
+                                        Profile
+                                    </Button>
+                                </Link>
+                            </>
+                        )}
                         <nav className="flex flex-col gap-4">
                             {menuItems.map((item, index) => (
                                 <Button
@@ -157,27 +180,13 @@ function Header() {
                                     {item.name}
                                 </Button>
                             ))}
-                            {isLoggedIn ? (
-                                <>
-                                    <div className="flex items-center gap-4 mb-4">
-                                        <Avatar className="h-8 w-8">
-                                            <AvatarImage src="/placeholder.svg" alt={username} />
-                                            <AvatarFallback>{username.charAt(0)}</AvatarFallback>
-                                        </Avatar>
-                                        <span>{username}</span>
-                                    </div>
-                                    <Link href="/profile">
-                                        <Button variant="ghost" className="w-full justify-start">
-                                            <User className="mr-2 h-4 w-4" />
-                                            Profile
-                                        </Button>
-                                    </Link>
-                                    <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
-                                        <LogOut className="mr-2 h-4 w-4" />
-                                        Log out
-                                    </Button>
-                                </>
-                            ) : (
+                            {isLoggedIn && (
+                                <Button variant="ghost" className="w-full justify-start" onClick={handleLogout}>
+                                    <LogOut className="mr-2 h-4 w-4" />
+                                    Log out
+                                </Button>
+                            )}
+                            {!isLoggedIn &&
                                 <>
 
                                     <Button className="w-full bg-[#F5F7FF] text-[#5046E5] hover:text-white" onClick={() => handleNavigation("/login")}>
@@ -187,7 +196,7 @@ function Header() {
                                         Sign Up
                                     </Button>
                                 </>
-                            )}
+                            }
                         </nav>
                     </SheetContent>
                 </Sheet>
